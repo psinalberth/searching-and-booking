@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: catalog-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/bookings
+  kafka:
+    bootstrapServers: localhost:29092
+    clientId: booking-service
+
+
+app:
+  config:
+    message:
+      event-booking-confirmed: event-booking-confirmed
+      event-booking-cancellation: event-booking-cancellation
+      event-booking-request-received: event-booking-request-received
+      event-booking-result: event-booking-result
+      event-booking-requested: event-booking-requested
+      booking-events:
+      - name: event-booking-requested
+        type: REQUESTED
+      - name: ${event-booking-confirmed}
+        type: CONFIRMED
+      - name: ${event-booking-cancellation}
+        type: CANCELED
+
+server:
+  port: 8081

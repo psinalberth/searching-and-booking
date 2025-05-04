@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: catalog-service
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+    mongodb:
+      uri: mongodb://localhost:27017/catalog
+  elasticsearch:
+    uris: localhost:29200
+  kafka:
+    bootstrapServers: localhost:29092
+    clientId: catalog-service
+
+app:
+  config:
+    search:
+      type: elasticsearch
+    message:
+      event-booking-cancellation: event-booking-cancellation
+      event-booking-requested: event-booking-requested
+      event-booking-result: event-booking-result
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always

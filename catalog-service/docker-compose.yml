@@ -1,0 +1,71 @@
+version: '3.5'
+
+services:
+  mongodb:
+    container_name: catalog-db
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: catalog
+      MONGODB_DATABASE: catalog
+    ports:
+      - "27017:27017"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOO_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+
+  kafka1:
+    container_name: bookings-kafka1
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LISTENERS: INTERNAL://:9092,EXTERNAL://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://bookings-kafka1:9092,EXTERNAL://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    depends_on:
+      - zookeeper
+      - kafka1
+    ports:
+      - "8580:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: LOCAL
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: bookings-kafka1:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.18.0
+    ports:
+      - "29200:9200"
+      - "29300:9300"
+    environment:
+      discovery.type: "single-node"
+      xpack.security.enabled: "false"
+      xpack.security.transport.ssl.enabled: "false"
+      xpack.security.http.ssl.enabled: "false"
+      ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+    volumes:
+      - "./esdata:/usr/share/elasticsearch/data"
+
+volumes:
+  db_data:
+  esdata:
+    driver: local
+
+networks:
+  bubble:
+    external: true
