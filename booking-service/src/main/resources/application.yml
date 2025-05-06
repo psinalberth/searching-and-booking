@@ -24,6 +24,8 @@ app:
         type: CONFIRMED
       - name: ${event-booking-cancellation}
         type: CANCELED
+    scheduler:
+      booking-request-scheduler-cron: "*/15 * * * * *"
 
 server:
   port: 8081
