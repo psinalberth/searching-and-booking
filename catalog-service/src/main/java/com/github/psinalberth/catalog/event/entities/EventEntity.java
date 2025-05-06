@@ -1,5 +1,6 @@
 package com.github.psinalberth.catalog.event.entities;
 
+import com.github.psinalberth.catalog.event.enums.EventStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -21,6 +22,9 @@ public record EventEntity(
     @Field("description")
     String description,
 
+    @Field("status")
+    EventStatus status,
+
     @Field("amenities")
     List<AmenityEntity> amenities,
 
@@ -29,6 +33,9 @@ public record EventEntity(
 
     @Field("date")
     LocalDateTime date,
+
+    @Field("max_subscription_date")
+    LocalDateTime maxSubscriptionDate,
 
     @Field("created_at")
     LocalDateTime createdAt
@@ -39,9 +46,11 @@ public record EventEntity(
                 id(),
                 title(),
                 description(),
+                status(),
                 amenities(),
                 availableSpots,
                 date(),
+                maxSubscriptionDate(),
                 createdAt()
         );
     }

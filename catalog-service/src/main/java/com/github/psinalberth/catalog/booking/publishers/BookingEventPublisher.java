@@ -1,6 +1,6 @@
-package com.github.psinalberth.catalog.event.publishers;
+package com.github.psinalberth.catalog.booking.publishers;
 
-import com.github.psinalberth.catalog.event.dtos.BookingEvent;
+import com.github.psinalberth.catalog.booking.dtos.BookingEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

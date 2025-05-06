@@ -1,4 +1,4 @@
-package com.github.psinalberth.catalog.event.dtos;
+package com.github.psinalberth.catalog.booking.enums;
 
 public enum BookingStatus {
     CONFIRMED,

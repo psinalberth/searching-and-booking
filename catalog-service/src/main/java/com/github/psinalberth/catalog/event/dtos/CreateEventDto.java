@@ -8,6 +8,7 @@ public record CreateEventDto(
         String description,
         List<String> amenities,
         Integer availableSpots,
-        LocalDateTime date
+        LocalDateTime date,
+        LocalDateTime maxSubscriptionDate
 ) {
 }

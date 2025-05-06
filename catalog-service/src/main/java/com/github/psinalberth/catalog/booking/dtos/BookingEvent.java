@@ -1,4 +1,7 @@
-package com.github.psinalberth.catalog.event.dtos;
+package com.github.psinalberth.catalog.booking.dtos;
+
+import com.github.psinalberth.catalog.booking.enums.BookingEventType;
+import com.github.psinalberth.catalog.booking.enums.BookingStatus;
 
 public record BookingEvent(
         String eventId,

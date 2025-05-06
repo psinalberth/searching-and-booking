@@ -1,8 +1,10 @@
-package com.github.psinalberth.catalog.event.service;
+package com.github.psinalberth.catalog.booking.service;
 
-import com.github.psinalberth.catalog.event.dtos.BookingEvent;
-import com.github.psinalberth.catalog.event.dtos.BookingStatus;
-import com.github.psinalberth.catalog.event.publishers.BookingEventPublisher;
+import com.github.psinalberth.catalog.booking.dtos.BookingEvent;
+import com.github.psinalberth.catalog.booking.enums.BookingStatus;
+import com.github.psinalberth.catalog.booking.publishers.BookingEventPublisher;
+import com.github.psinalberth.catalog.event.service.EventManagementService;
+import com.github.psinalberth.catalog.event.service.EventSearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

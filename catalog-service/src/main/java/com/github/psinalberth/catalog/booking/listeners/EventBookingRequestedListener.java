@@ -1,7 +1,7 @@
-package com.github.psinalberth.catalog.event.listeners;
+package com.github.psinalberth.catalog.booking.listeners;
 
-import com.github.psinalberth.catalog.event.dtos.BookingEvent;
-import com.github.psinalberth.catalog.event.service.BookingService;
+import com.github.psinalberth.catalog.booking.dtos.BookingEvent;
+import com.github.psinalberth.catalog.booking.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

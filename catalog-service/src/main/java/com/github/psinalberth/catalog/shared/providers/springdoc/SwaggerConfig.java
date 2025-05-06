@@ -1,4 +1,4 @@
-package com.github.psinalberth.catalog.event.providers.springdoc;
+package com.github.psinalberth.catalog.shared.providers.springdoc;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;

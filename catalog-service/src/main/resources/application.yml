@@ -21,6 +21,7 @@ app:
       event-booking-cancellation: event-booking-cancellation
       event-booking-requested: event-booking-requested
       event-booking-result: event-booking-result
+      event-updated: event-updated
 
 management:
   endpoints:

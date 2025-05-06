@@ -2,6 +2,8 @@ package com.github.psinalberth.catalog.event.service;
 
 import com.github.psinalberth.catalog.event.dtos.CreateEventDto;
 import com.github.psinalberth.catalog.event.dtos.EventDto;
+import com.github.psinalberth.catalog.event.dtos.EventUpdatedDto;
+import com.github.psinalberth.catalog.event.publishers.EventPublisher;
 import com.github.psinalberth.catalog.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +17,14 @@ public class EventManagementService {
 
     private final EventRepository eventRepository;
     private final EventIndexProvider indexServiceProvider;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public EventDto save(final CreateEventDto eventDto) {
         log.info("Creating event {}", eventDto);
         var event = eventRepository.save(eventDto);
         indexServiceProvider.index(event);
+        eventPublisher.sendEventUpdateEvent(EventUpdatedDto.of(event));
         return event;
     }
 

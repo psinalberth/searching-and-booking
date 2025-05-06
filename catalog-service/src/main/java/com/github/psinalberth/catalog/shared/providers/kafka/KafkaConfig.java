@@ -1,4 +1,4 @@
-package com.github.psinalberth.catalog.event.providers.kafka;
+package com.github.psinalberth.catalog.shared.providers.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
