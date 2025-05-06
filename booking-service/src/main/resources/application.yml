@@ -17,13 +17,7 @@ app:
       event-booking-request-received: event-booking-request-received
       event-booking-result: event-booking-result
       event-booking-requested: event-booking-requested
-      booking-events:
-      - name: event-booking-requested
-        type: REQUESTED
-      - name: ${event-booking-confirmed}
-        type: CONFIRMED
-      - name: ${event-booking-cancellation}
-        type: CANCELED
+      event-updated: event-updated
     scheduler:
       booking-request-scheduler-cron: "*/15 * * * * *"
 
