@@ -3,9 +3,10 @@ package com.github.psinalberth.booking.service;
 import com.github.psinalberth.booking.dtos.BookingDto;
 import com.github.psinalberth.booking.dtos.BookingRequestedEvent;
 import com.github.psinalberth.booking.dtos.CreateBookingDto;
-import com.github.psinalberth.booking.dtos.OutboxType;
+import com.github.psinalberth.outbox.enums.OutboxType;
 import com.github.psinalberth.booking.repository.BookingRepository;
-import com.github.psinalberth.booking.repository.OutboxRepository;
+import com.github.psinalberth.outbox.repository.OutboxRepository;
+import com.github.psinalberth.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,6 +20,7 @@ public class BookingCreationService {
 
     private final BookingRepository bookingRepository;
     private final OutboxRepository outboxRepository;
+    private final EventRepository eventRepository;
     private final ApplicationEventPublisher internalEventPublisher;
 
     @Transactional
@@ -28,9 +30,14 @@ public class BookingCreationService {
                 .ifPresentOrElse(
                         booking -> log.info("Booking with id {} was already processed for event {}", booking.id(), booking.eventId()),
                         () -> {
-                            var booking = bookingRepository.save(bookingDto);
-                            var outbox = outboxRepository.save(OutboxType.BOOKING_REQUEST, booking);
-                            internalEventPublisher.publishEvent(new BookingRequestedEvent(outbox));
+                            eventRepository.findById(bookingDto.eventId())
+                                    .ifPresentOrElse(event -> {
+                                        if (event.isAvailableForSubscription()) {
+                                            var booking = bookingRepository.save(bookingDto);
+                                            var outbox = outboxRepository.save(OutboxType.BOOKING_REQUEST, booking);
+                                            internalEventPublisher.publishEvent(new BookingRequestedEvent(outbox));
+                                        }
+                                    }, () -> {});
                         });
     }
 }

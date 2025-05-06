@@ -1,7 +1,7 @@
 package com.github.psinalberth.booking.service;
 
-import com.github.psinalberth.booking.dtos.OutboxType;
-import com.github.psinalberth.booking.repository.OutboxRepository;
+import com.github.psinalberth.outbox.enums.OutboxType;
+import com.github.psinalberth.outbox.repository.OutboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class BookingRequestScheduler {
 
-    private final SendOutboxBookingRequestService outboxBookingRequestService;
+    private final SendBookingRequestService outboxBookingRequestService;
     private final OutboxRepository outboxRepository;
 
     @Scheduled(cron = "${app.config.scheduler.booking-request-scheduler-cron}")

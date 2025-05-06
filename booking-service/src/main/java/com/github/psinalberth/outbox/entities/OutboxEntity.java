@@ -1,7 +1,7 @@
-package com.github.psinalberth.booking.entities;
+package com.github.psinalberth.outbox.entities;
 
-import com.github.psinalberth.booking.dtos.OutboxStatus;
-import com.github.psinalberth.booking.dtos.OutboxType;
+import com.github.psinalberth.outbox.enums.OutboxStatus;
+import com.github.psinalberth.outbox.enums.OutboxType;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;

@@ -1,7 +1,8 @@
-package com.github.psinalberth.booking.entities;
+package com.github.psinalberth.outbox.entities;
 
-import com.github.psinalberth.booking.dtos.OutboxStatus;
-import com.github.psinalberth.booking.dtos.OutboxType;
+import com.github.psinalberth.outbox.enums.OutboxStatus;
+import com.github.psinalberth.outbox.enums.OutboxType;
+import com.github.psinalberth.outbox.dtos.OutboxDto;
 import org.bson.Document;
 import org.mapstruct.Mapper;
 
@@ -22,8 +23,8 @@ public interface OutboxMapper {
         );
     }
 
-    default Outbox toDto(final OutboxEntity entity) {
-        return new Outbox(
+    default OutboxDto toDto(final OutboxEntity entity) {
+        return new OutboxDto(
                 entity.id(),
                 entity.type(),
                 entity.status(),

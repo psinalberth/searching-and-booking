@@ -1,7 +1,7 @@
 package com.github.psinalberth.booking.entities;
 
 import com.github.psinalberth.booking.dtos.BookingDto;
-import com.github.psinalberth.booking.dtos.BookingStatus;
+import com.github.psinalberth.booking.enums.BookingStatus;
 import com.github.psinalberth.booking.dtos.CreateBookingDto;
 import org.mapstruct.Mapper;
 

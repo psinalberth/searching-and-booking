@@ -1,4 +1,4 @@
-package com.github.psinalberth.booking.providers.springdoc;
+package com.github.psinalberth.shared.providers.springdoc;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;

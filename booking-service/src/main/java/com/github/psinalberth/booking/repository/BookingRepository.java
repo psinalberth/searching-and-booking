@@ -1,8 +1,7 @@
 package com.github.psinalberth.booking.repository;
 
 import com.github.psinalberth.booking.dtos.BookingDto;
-import com.github.psinalberth.booking.dtos.BookingEventType;
-import com.github.psinalberth.booking.dtos.BookingStatus;
+import com.github.psinalberth.booking.enums.BookingStatus;
 import com.github.psinalberth.booking.dtos.CreateBookingDto;
 import com.github.psinalberth.booking.entities.BookingEntity;
 import com.github.psinalberth.booking.entities.BookingMapper;

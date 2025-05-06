@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class KafkaBookingQueuePublisher implements BookingQueue {
+public class BookingQueuePublisher implements BookingQueue {
 
     private final String topicName;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public KafkaBookingQueuePublisher(
+    public BookingQueuePublisher(
             @Value("${app.config.message.event-booking-request-received}") String topicName,
             KafkaTemplate<String, Object> kafkaTemplate
     ) {

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KafkaBookingQueueListener {
+public class BookingQueueListener {
 
     private final BookingCreationService bookingService;
 

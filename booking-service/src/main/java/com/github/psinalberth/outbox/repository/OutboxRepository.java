@@ -1,11 +1,11 @@
-package com.github.psinalberth.booking.repository;
+package com.github.psinalberth.outbox.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.psinalberth.booking.dtos.OutboxStatus;
-import com.github.psinalberth.booking.dtos.OutboxType;
-import com.github.psinalberth.booking.entities.Outbox;
-import com.github.psinalberth.booking.entities.OutboxMapper;
+import com.github.psinalberth.outbox.enums.OutboxStatus;
+import com.github.psinalberth.outbox.enums.OutboxType;
+import com.github.psinalberth.outbox.dtos.OutboxDto;
+import com.github.psinalberth.outbox.entities.OutboxMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ public class OutboxRepository {
     private final ObjectMapper objectMapper;
 
     @Transactional
-    public <T> Outbox save(final OutboxType type, final T payload) {
+    public <T> OutboxDto save(final OutboxType type, final T payload) {
 
         try {
             var json = objectMapper.writeValueAsString(payload);
@@ -39,7 +39,7 @@ public class OutboxRepository {
                 .ifPresent(outbox -> delegate.save(outbox.withStatus(status)));
     }
 
-    public List<Outbox> findAllPendingByType(final OutboxType type) {
+    public List<OutboxDto> findAllPendingByType(final OutboxType type) {
         return delegate.findAllByTypeAndStatus(type, OutboxStatus.CREATED)
                 .stream().map(outboxMapper::toDto)
                 .toList();

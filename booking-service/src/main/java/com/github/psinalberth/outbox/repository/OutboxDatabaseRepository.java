@@ -1,8 +1,8 @@
-package com.github.psinalberth.booking.repository;
+package com.github.psinalberth.outbox.repository;
 
-import com.github.psinalberth.booking.dtos.OutboxStatus;
-import com.github.psinalberth.booking.dtos.OutboxType;
-import com.github.psinalberth.booking.entities.OutboxEntity;
+import com.github.psinalberth.outbox.enums.OutboxStatus;
+import com.github.psinalberth.outbox.enums.OutboxType;
+import com.github.psinalberth.outbox.entities.OutboxEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

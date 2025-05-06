@@ -1,4 +1,4 @@
-package com.github.psinalberth.booking.dtos;
+package com.github.psinalberth.booking.enums;
 
 public enum BookingEventType {
     REQUEST,

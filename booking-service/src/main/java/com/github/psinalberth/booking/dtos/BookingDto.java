@@ -1,5 +1,7 @@
 package com.github.psinalberth.booking.dtos;
 
+import com.github.psinalberth.booking.enums.BookingStatus;
+
 import java.time.LocalDateTime;
 import java.util.List;
 

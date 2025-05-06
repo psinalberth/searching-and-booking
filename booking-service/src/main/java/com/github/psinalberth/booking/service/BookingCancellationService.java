@@ -1,7 +1,7 @@
 package com.github.psinalberth.booking.service;
 
 import com.github.psinalberth.booking.dtos.BookingEvent;
-import com.github.psinalberth.booking.dtos.BookingEventType;
+import com.github.psinalberth.booking.enums.BookingEventType;
 import com.github.psinalberth.booking.publishers.BookingEventPublisher;
 import com.github.psinalberth.booking.repository.BookingRepository;
 import lombok.extern.slf4j.Slf4j;
