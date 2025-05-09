@@ -6,14 +6,13 @@ import com.github.psinalberth.booking.dtos.CreateBookingDto;
 import org.mapstruct.Mapper;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 public interface BookingMapper {
 
     default BookingEntity toEntity(final CreateBookingDto bookingDto) {
         return new BookingEntity(
-                UUID.randomUUID().toString(),
+                bookingDto.bookingId(),
                 bookingDto.userId(),
                 bookingDto.eventId(),
                 BookingStatus.REQUESTED,

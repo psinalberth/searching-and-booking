@@ -6,8 +6,8 @@ This repository contains two microservices, **Catalog Service** and **Booking Se
 
 - [Overview](#overview)
 - [Services](#services)
-  - [Catalog Service](#catalog-service)
-  - [Booking Service](#booking-service)
+    - [Catalog Service](#catalog-service)
+    - [Booking Service](#booking-service)
 - [Features](#features)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
@@ -40,6 +40,7 @@ The **Booking Service** handles booking operations for events. It provides the f
 - Creating booking requests.
 - Processing booking results and cancellations.
 - Managing an outbox pattern for reliable event publishing.
+- WebSocket support for real-time updates.
 
 ---
 
@@ -58,6 +59,7 @@ The **Booking Service** handles booking operations for events. It provides the f
 - **Outbox Pattern**: Ensures reliable event publishing for booking requests.
 - **Kafka Integration**: Handles booking-related events via Kafka.
 - **Swagger API Documentation**: Provides interactive API documentation.
+- **WebSocket Integration**: Enables real-time notifications for booking updates.
 
 ---
 
@@ -70,6 +72,7 @@ The system follows a microservices architecture with the following components:
 - **Kafka**: Used for asynchronous communication between services.
 - **MongoDB**: Stores event and booking data.
 - **Elasticsearch**: Provides advanced search capabilities for events.
+- **WebSocket**: Supports real-time communication for booking updates.
 
 ---
 
@@ -87,4 +90,3 @@ The system follows a microservices architecture with the following components:
    ```bash
    git clone https://github.com/your-repo/searching-and-booking.git
    cd searching-and-booking
-   ```

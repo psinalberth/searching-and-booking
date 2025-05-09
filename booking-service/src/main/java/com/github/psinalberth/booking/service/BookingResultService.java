@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookingResultService {
 
     private final BookingRepository bookingRepository;
+    private final BookingNotificationService notificationService;
 
     @Transactional
     public void processBookingResult(final BookingEvent bookingEvent) {
@@ -20,6 +21,7 @@ public class BookingResultService {
                 .ifPresent(booking -> {
                     log.info("Updating event {} with status '{}'", booking.eventId(), bookingEvent.type());
                     bookingRepository.update(booking.id(), bookingEvent.status());
+                    notificationService.notifyStatus(booking.id(), bookingEvent);
                 });
 
     }
