@@ -1,7 +1,7 @@
 package com.github.psinalberth.booking.controllers;
 
 import com.github.psinalberth.booking.dtos.BookingCreationResponseDto;
-import com.github.psinalberth.booking.dtos.CreateBookingDto;
+import com.github.psinalberth.booking.dtos.CreateBookingRequest;
 import com.github.psinalberth.booking.service.BookingCancellationService;
 import com.github.psinalberth.booking.service.BookingQueue;
 import jakarta.validation.Valid;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,26 +23,25 @@ import java.util.UUID;
 @RestController
 @RequestMapping("v1/bookings")
 @RequiredArgsConstructor
-public class BookingController {
+public class BookingController implements BookingControllerOpenApi {
 
     private final BookingQueue bookingQueue;
     private final BookingCancellationService bookingService;
 
     @PostMapping
-    public ResponseEntity<BookingCreationResponseDto> bookEvent(final @Valid @RequestBody CreateBookingDto bookingDto) {
+    public ResponseEntity<BookingCreationResponseDto> bookEvent(@RequestHeader("user_id") final String userId, final @Valid @RequestBody CreateBookingRequest request) {
         var bookingId = UUID.randomUUID().toString();
         var locationUri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(bookingId)
                 .toUri()
                 .toString();
-        var bookingResponse = new BookingCreationResponseDto(bookingId, locationUri, LocalDateTime.now());
 
-        bookingQueue.enqueue(bookingDto.withBookingId(bookingId));
+        bookingQueue.enqueue(request.toBookingDto(userId, bookingId));
 
         return ResponseEntity.accepted()
                 .header(HttpHeaders.LOCATION, locationUri)
-                .body(bookingResponse);
+                .body(new BookingCreationResponseDto(bookingId, locationUri, LocalDateTime.now()));
     }
 
     @DeleteMapping("/{bookingId}")

@@ -10,7 +10,6 @@ public record BookingDto(
         String userId,
         String eventId,
         BookingStatus status,
-        LocalDateTime date,
         LocalDateTime createdAt
 ) {
 

@@ -16,7 +16,6 @@ public interface BookingMapper {
                 bookingDto.userId(),
                 bookingDto.eventId(),
                 BookingStatus.REQUESTED,
-                bookingDto.date(),
                 LocalDateTime.now(),
                 null
         );

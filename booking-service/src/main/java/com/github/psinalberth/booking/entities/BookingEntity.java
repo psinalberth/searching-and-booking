@@ -23,9 +23,6 @@ public record BookingEntity(
         @Field(value = "status")
         BookingStatus status,
 
-        @Field(value = "date")
-        LocalDateTime date,
-
         @Field("created_at")
         LocalDateTime createdAt,
 
