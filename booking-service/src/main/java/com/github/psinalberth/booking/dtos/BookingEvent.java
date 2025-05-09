@@ -13,4 +13,22 @@ public record BookingEvent(
     public BookingEvent(String eventId, String user, BookingEventType type) {
         this(eventId, user, type, null);
     }
+
+    public static BookingEvent of(final BookingEventType type, final BookingDto booking) {
+        return new BookingEvent(
+                booking.eventId(),
+                booking.userId(),
+                type,
+                booking.status()
+        );
+    }
+
+    public static BookingEvent of(final CreateBookingDto booking, final BookingStatus status) {
+        return new BookingEvent(
+                booking.eventId(),
+                booking.userId(),
+                BookingEventType.REQUEST,
+                status
+        );
+    }
 }
