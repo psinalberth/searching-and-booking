@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: notification-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/notifications
+  kafka:
+    bootstrapServers: localhost:29092
+    clientId: notification-service
+  sendgrid:
+    api-key: ${SENDGRID_API_KEY}
+
+
+app:
+  config:
+    message:
+      notification-request: notification-request
+    mail:
+      account: ${APP_MAIL_ACCOUNT}
+    sms:
+      twilio:
+        accountSid: ${TWILIO_ACCOUNT_SID}
+        authToken: ${TWILIO_AUTH_TOKEN}
+        phoneNumber: ${TWILIO_PHONE_NUMBER}
+
+server:
+  port: 8082

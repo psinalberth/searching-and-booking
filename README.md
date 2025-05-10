@@ -1,6 +1,6 @@
 # Searching and Booking System
 
-This repository contains two microservices, **Catalog Service** and **Booking Service**, which together form a system for managing events, bookings, and related operations. The system is built using Spring Boot, Kafka, MongoDB, and Elasticsearch.
+This repository contains three microservices, **Catalog Service** and **Booking Service**, which together form a system for managing events, bookings, and related operations. The system is built using Spring Boot, Kafka, MongoDB, and Elasticsearch.
 
 ## Table of Contents
 
@@ -8,6 +8,7 @@ This repository contains two microservices, **Catalog Service** and **Booking Se
 - [Services](#services)
     - [Catalog Service](#catalog-service)
     - [Booking Service](#booking-service)
+    - [Notification Service](#notification-service)
 - [Features](#features)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
@@ -42,6 +43,15 @@ The **Booking Service** handles booking operations for events. It provides the f
 - Managing an outbox pattern for reliable event publishing.
 - WebSocket support for real-time updates.
 
+### Notification Service
+
+The **Notification Service** is responsible for sending notifications via multiple channels, including email and SMS. It provides the following functionalities:
+
+- **Email Notifications**: Uses SendGrid for sending emails.
+- **SMS Notifications**: Uses Twilio for sending SMS messages.
+- **Extensible Notification Providers**: Built with a `NotificationProvider` interface to support additional notification channels.
+- **MongoDB Integration**: Stores notification history for tracking purposes.
+
 ---
 
 ## Features
@@ -61,6 +71,13 @@ The **Booking Service** handles booking operations for events. It provides the f
 - **Swagger API Documentation**: Provides interactive API documentation.
 - **WebSocket Integration**: Enables real-time notifications for booking updates.
 
+### Notification Service Features
+
+- **Email Notifications**: Configurable sender email address via `app.config.mail.account` property.
+- **SMS Notifications**: Configurable Twilio account credentials and phone number.
+- **MongoDB Integration**: Stores notification history for tracking purposes.
+- **Extensibility**: Easily add new notification channels by implementing the `NotificationProvider` interface.
+
 ---
 
 ## Architecture
@@ -69,8 +86,9 @@ The system follows a microservices architecture with the following components:
 
 - **Catalog Service**: Manages event data and integrates with Elasticsearch for search capabilities.
 - **Booking Service**: Handles booking operations and integrates with Kafka for event-driven communication.
+- **Notification Service**: Sends notifications via email and SMS, with MongoDB for persistence.
 - **Kafka**: Used for asynchronous communication between services.
-- **MongoDB**: Stores event and booking data.
+- **MongoDB**: Stores event, booking, and notification data.
 - **Elasticsearch**: Provides advanced search capabilities for events.
 - **WebSocket**: Supports real-time communication for booking updates.
 
