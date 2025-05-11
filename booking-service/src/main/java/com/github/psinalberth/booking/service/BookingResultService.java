@@ -1,6 +1,7 @@
 package com.github.psinalberth.booking.service;
 
 import com.github.psinalberth.booking.dtos.BookingEvent;
+import com.github.psinalberth.booking.enums.BookingStatus;
 import com.github.psinalberth.booking.repository.BookingRepository;
 import com.github.psinalberth.notification.dtos.BookingNotificationEvent;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,15 @@ public class BookingResultService {
     public void processBookingResult(final BookingEvent bookingEvent) {
         bookingRepository.findBy(bookingEvent.eventId(), bookingEvent.user())
                 .ifPresent(booking -> {
-                    log.info("Updating event {} with status '{}'", booking.eventId(), bookingEvent.type());
-                    bookingRepository.update(booking.id(), bookingEvent.status());
+
+                    if (bookingEvent.status() == BookingStatus.CONFIRMED) {
+                        log.info("Updating booking {} with status '{}'", booking.eventId(), bookingEvent.type());
+                        bookingRepository.update(booking.id(), bookingEvent.status());
+                    } else {
+                        log.info("Removing booking {} due to status '{}'", booking.eventId(), bookingEvent.status());
+                        bookingRepository.remove(booking.id());
+                    }
+
                     internalEventPublisher.publishEvent(new BookingNotificationEvent(booking.id(), bookingEvent, booking.user()));
                 });
 

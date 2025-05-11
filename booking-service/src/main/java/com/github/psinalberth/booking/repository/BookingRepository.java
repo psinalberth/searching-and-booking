@@ -42,6 +42,7 @@ public class BookingRepository {
                 .map(bookingMapper::toDto);
     }
 
+    @Transactional
     public void update(final String bookingId, final BookingStatus status) {
         var query = new Query(Criteria.where("_id").is(bookingId));
         var update = new Update()
@@ -49,5 +50,12 @@ public class BookingRepository {
                 .set("update_at", LocalDateTime.now());
         var execution = mongoOperations.updateFirst(query, update, BookingEntity.class);
         log.info("Updated booking {} with status {}. Modified count = {}", bookingId, status, execution.getModifiedCount());
+    }
+
+    @Transactional
+    public void remove(final String bookingId) {
+        log.info("Removing booking with id {}", bookingId);
+        var query = new Query(Criteria.where("_id").is(bookingId));
+        mongoOperations.findAndRemove(query, BookingEntity.class);
     }
 }

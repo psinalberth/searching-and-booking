@@ -48,15 +48,15 @@ public class BookingCreationService {
                                         internalEventPublisher.publishEvent(new BookingRequestedEvent(outbox));
                                     } else {
                                         log.info("Event {} is not available for subscription. Rejecting booking request.", bookingDto.eventId());
-                                        sendEventCancellation(bookingDto, BookingStatus.UNAVAILABLE_SPOTS);
+                                        sendCancellationEvent(bookingDto, BookingStatus.UNAVAILABLE_SPOTS);
                                     }
                                 }, () -> {
                                     log.info("Event {} not found. Rejecting booking request.", bookingDto.eventId());
-                                    sendEventCancellation(bookingDto, BookingStatus.EVENT_NOT_AVAILABLE);
+                                    sendCancellationEvent(bookingDto, BookingStatus.EVENT_NOT_AVAILABLE);
                                 }));
     }
 
-    private void sendEventCancellation(final CreateBookingDto bookingDto, final BookingStatus status) {
+    private void sendCancellationEvent(final CreateBookingDto bookingDto, final BookingStatus status) {
         internalEventPublisher.publishEvent(new BookingNotificationEvent(
                 bookingDto.bookingId(),
                 BookingEvent.cancellation(bookingDto, status),
