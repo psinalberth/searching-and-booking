@@ -8,6 +8,7 @@ import com.github.psinalberth.booking.enums.BookingEventType;
 import com.github.psinalberth.booking.enums.BookingStatus;
 import com.github.psinalberth.booking.repository.BookingRepository;
 import com.github.psinalberth.event.repository.EventRepository;
+import com.github.psinalberth.notification.dtos.BookingNotificationEvent;
 import com.github.psinalberth.outbox.enums.OutboxType;
 import com.github.psinalberth.outbox.repository.OutboxRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,6 @@ public class BookingCreationService {
     private final OutboxRepository outboxRepository;
     private final EventRepository eventRepository;
     private final ApplicationEventPublisher internalEventPublisher;
-    private final BookingNotificationService notificationService;
 
     @Transactional
     public void create(final CreateBookingDto bookingDto) {
@@ -34,7 +34,7 @@ public class BookingCreationService {
                 .ifPresentOrElse(
                         booking -> {
                             log.info("Booking with id {} was already processed for event {}.", booking.id(), booking.eventId());
-                            notificationService.notifyStatus(booking.id(), BookingEvent.of(BookingEventType.REQUEST, booking));
+                            internalEventPublisher.publishEvent(new BookingNotificationEvent(booking.id(), BookingEvent.of(BookingEventType.CONFIRMATION, booking)));
                         },
                         () -> {
                             eventRepository.findById(bookingDto.eventId())
@@ -45,11 +45,11 @@ public class BookingCreationService {
                                             internalEventPublisher.publishEvent(new BookingRequestedEvent(outbox));
                                         } else {
                                             log.info("Event {} is not available for subscription. Rejecting booking request.", bookingDto.eventId());
-                                            notificationService.notifyStatus(bookingDto.bookingId(), BookingEvent.of(bookingDto, BookingStatus.UNAVAILABLE_SPOTS));
+                                            internalEventPublisher.publishEvent(new BookingNotificationEvent(bookingDto.bookingId(), BookingEvent.cancellation(bookingDto, BookingStatus.UNAVAILABLE_SPOTS)));
                                         }
                                     }, () -> {
                                         log.info("Event {} not found. Rejecting booking request.", bookingDto.eventId());
-                                        notificationService.notifyStatus(bookingDto.bookingId(), BookingEvent.of(bookingDto, BookingStatus.EVENT_NOT_AVAILABLE));
+                                        internalEventPublisher.publishEvent(new BookingNotificationEvent(bookingDto.bookingId(), BookingEvent.cancellation(bookingDto, BookingStatus.EVENT_NOT_AVAILABLE)));
                                     });
                         });
     }

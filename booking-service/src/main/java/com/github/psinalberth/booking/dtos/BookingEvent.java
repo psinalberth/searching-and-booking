@@ -23,11 +23,11 @@ public record BookingEvent(
         );
     }
 
-    public static BookingEvent of(final CreateBookingDto booking, final BookingStatus status) {
+    public static BookingEvent cancellation(final CreateBookingDto booking, final BookingStatus status) {
         return new BookingEvent(
                 booking.eventId(),
                 booking.userId(),
-                BookingEventType.REQUEST,
+                BookingEventType.CANCELLATION,
                 status
         );
     }

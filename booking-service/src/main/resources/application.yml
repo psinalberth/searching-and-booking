@@ -18,8 +18,18 @@ app:
       event-booking-result: event-booking-result
       event-booking-requested: event-booking-requested
       event-updated: event-updated
+      notification-request: notification-request
     scheduler:
       booking-request-scheduler-cron: "*/15 * * * * *"
+    notification:
+      templates:
+        - type: CONFIRMATION
+          templateId: 486e5f49-b936-4384-88e1-761b61ad282e
+        - type: CANCELLATION
+          templateId: aa71fc6d-ad5c-4f6b-9eae-b09934b15e53
+    user-info:
+      email: ${APP_USER_INFO_EMAIL}
+      phone: ${APP_USER_INFO_PHONE}
 
 server:
   port: 8081
