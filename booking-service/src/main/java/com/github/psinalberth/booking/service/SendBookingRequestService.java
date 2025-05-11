@@ -38,7 +38,7 @@ public class SendBookingRequestService {
         try {
             log.info("Processing outbox record with id {} for 'booking request'", outbox.id());
             var payload = objectMapper.readValue(outbox.payload(), BookingDto.class);
-            var bookingEvent = new BookingEvent(payload.eventId(), payload.userId(), BookingEventType.REQUEST);
+            var bookingEvent = new BookingEvent(payload.eventId(), payload.user().id(), BookingEventType.REQUEST);
             bookingEventPublisher.sendBookingEvent(topic, bookingEvent);
             outboxRepository.updateStatus(outbox.id(), OutboxStatus.SENT);
         } catch (JsonProcessingException e) {

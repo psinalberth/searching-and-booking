@@ -29,28 +29,38 @@ public class BookingCreationService {
 
     @Transactional
     public void create(final CreateBookingDto bookingDto) {
-        bookingRepository.findBy(bookingDto.eventId(), bookingDto.userId())
+        bookingRepository.findBy(bookingDto.eventId(), bookingDto.userInfo().id())
                 .filter(BookingDto::isProcessed)
                 .ifPresentOrElse(
                         booking -> {
                             log.info("Booking with id {} was already processed for event {}.", booking.id(), booking.eventId());
-                            internalEventPublisher.publishEvent(new BookingNotificationEvent(booking.id(), BookingEvent.of(BookingEventType.CONFIRMATION, booking)));
+                            internalEventPublisher.publishEvent(new BookingNotificationEvent(
+                                    booking.id(),
+                                    BookingEvent.of(BookingEventType.CONFIRMATION, booking),
+                                    bookingDto.userInfo())
+                            );
                         },
-                        () -> {
-                            eventRepository.findById(bookingDto.eventId())
-                                    .ifPresentOrElse(event -> {
-                                        if (event.isAvailableForSubscription()) {
-                                            var booking = bookingRepository.save(bookingDto);
-                                            var outbox = outboxRepository.save(OutboxType.BOOKING_REQUEST, booking);
-                                            internalEventPublisher.publishEvent(new BookingRequestedEvent(outbox));
-                                        } else {
-                                            log.info("Event {} is not available for subscription. Rejecting booking request.", bookingDto.eventId());
-                                            internalEventPublisher.publishEvent(new BookingNotificationEvent(bookingDto.bookingId(), BookingEvent.cancellation(bookingDto, BookingStatus.UNAVAILABLE_SPOTS)));
-                                        }
-                                    }, () -> {
-                                        log.info("Event {} not found. Rejecting booking request.", bookingDto.eventId());
-                                        internalEventPublisher.publishEvent(new BookingNotificationEvent(bookingDto.bookingId(), BookingEvent.cancellation(bookingDto, BookingStatus.EVENT_NOT_AVAILABLE)));
-                                    });
-                        });
+                        () -> eventRepository.findById(bookingDto.eventId())
+                                .ifPresentOrElse(event -> {
+                                    if (event.isAvailableForSubscription()) {
+                                        var booking = bookingRepository.save(bookingDto);
+                                        var outbox = outboxRepository.save(OutboxType.BOOKING_REQUEST, booking);
+                                        internalEventPublisher.publishEvent(new BookingRequestedEvent(outbox));
+                                    } else {
+                                        log.info("Event {} is not available for subscription. Rejecting booking request.", bookingDto.eventId());
+                                        sendEventCancellation(bookingDto, BookingStatus.UNAVAILABLE_SPOTS);
+                                    }
+                                }, () -> {
+                                    log.info("Event {} not found. Rejecting booking request.", bookingDto.eventId());
+                                    sendEventCancellation(bookingDto, BookingStatus.EVENT_NOT_AVAILABLE);
+                                }));
+    }
+
+    private void sendEventCancellation(final CreateBookingDto bookingDto, final BookingStatus status) {
+        internalEventPublisher.publishEvent(new BookingNotificationEvent(
+                bookingDto.bookingId(),
+                BookingEvent.cancellation(bookingDto, status),
+                bookingDto.userInfo())
+        );
     }
 }

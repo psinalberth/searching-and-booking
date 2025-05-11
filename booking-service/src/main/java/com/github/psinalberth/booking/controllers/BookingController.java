@@ -4,6 +4,7 @@ import com.github.psinalberth.booking.dtos.BookingCreationResponseDto;
 import com.github.psinalberth.booking.dtos.CreateBookingRequest;
 import com.github.psinalberth.booking.service.BookingCancellationService;
 import com.github.psinalberth.booking.service.BookingQueue;
+import com.github.psinalberth.shared.dtos.UserInfo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -29,7 +30,12 @@ public class BookingController implements BookingControllerOpenApi {
     private final BookingCancellationService bookingService;
 
     @PostMapping
-    public ResponseEntity<BookingCreationResponseDto> bookEvent(@RequestHeader("user_id") final String userId, final @Valid @RequestBody CreateBookingRequest request) {
+    public ResponseEntity<BookingCreationResponseDto> bookEvent(
+            @RequestHeader("X-User-Id") final String userId,
+            @RequestHeader("X-User-Email") final String userEmail,
+            @RequestHeader("X-User-Phone") final String userPhone,
+            final @Valid @RequestBody CreateBookingRequest request
+    ) {
         var bookingId = UUID.randomUUID().toString();
         var locationUri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -37,7 +43,7 @@ public class BookingController implements BookingControllerOpenApi {
                 .toUri()
                 .toString();
 
-        bookingQueue.enqueue(request.toBookingDto(userId, bookingId));
+        bookingQueue.enqueue(request.toBookingDto(new UserInfo(userId, userEmail, userPhone), bookingId));
 
         return ResponseEntity.accepted()
                 .header(HttpHeaders.LOCATION, locationUri)

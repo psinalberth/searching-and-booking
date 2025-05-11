@@ -14,8 +14,8 @@ public record BookingEntity(
         @Field(value = "_id", targetType = FieldType.STRING)
         String id,
 
-        @Field(value = "user_id")
-        String userId,
+        @Field(value = "user")
+        UserInfoEntity user,
 
         @Field(value = "event_id")
         String eventId,

@@ -4,6 +4,7 @@ import com.github.psinalberth.booking.dtos.BookingCreationResponseDto;
 import com.github.psinalberth.booking.dtos.CreateBookingRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -33,7 +34,9 @@ public interface BookingControllerOpenApi {
             }
     )
     ResponseEntity<BookingCreationResponseDto> bookEvent(
-            @Parameter(example = "44567") final String userId,
+            @Parameter(example = "44567", in = ParameterIn.HEADER) final String userId,
+            @Parameter(example = "44567", in = ParameterIn.HEADER) final String userEmail,
+            @Parameter(example = "44567", in = ParameterIn.HEADER) final String userPhone,
             final CreateBookingRequest request);
 
     @Operation(

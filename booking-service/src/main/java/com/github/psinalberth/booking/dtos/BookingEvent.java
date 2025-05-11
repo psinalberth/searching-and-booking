@@ -17,7 +17,7 @@ public record BookingEvent(
     public static BookingEvent of(final BookingEventType type, final BookingDto booking) {
         return new BookingEvent(
                 booking.eventId(),
-                booking.userId(),
+                booking.user().id(),
                 type,
                 booking.status()
         );
@@ -26,7 +26,7 @@ public record BookingEvent(
     public static BookingEvent cancellation(final CreateBookingDto booking, final BookingStatus status) {
         return new BookingEvent(
                 booking.eventId(),
-                booking.userId(),
+                booking.userInfo().id(),
                 BookingEventType.CANCELLATION,
                 status
         );

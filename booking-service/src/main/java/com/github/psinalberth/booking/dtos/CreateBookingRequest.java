@@ -1,5 +1,6 @@
 package com.github.psinalberth.booking.dtos;
 
+import com.github.psinalberth.shared.dtos.UserInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -10,7 +11,7 @@ public record CreateBookingRequest(
         String eventId
 ) {
 
-    public CreateBookingDto toBookingDto(final String user, final String bookingId) {
-        return new CreateBookingDto(eventId(), user, bookingId);
+    public CreateBookingDto toBookingDto(final UserInfo userInfo, final String bookingId) {
+        return new CreateBookingDto(eventId(), userInfo, bookingId);
     }
 }

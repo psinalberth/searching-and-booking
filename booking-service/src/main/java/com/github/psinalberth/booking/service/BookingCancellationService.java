@@ -32,7 +32,7 @@ public class BookingCancellationService {
         log.info("Received booking cancellation request for booking {}", bookingId);
         bookingRepository.findById(bookingId)
                 .ifPresent(booking -> {
-                    var event = new BookingEvent(booking.eventId(), booking.userId(), BookingEventType.CANCELLATION);
+                    var event = new BookingEvent(booking.eventId(), booking.user().id(), BookingEventType.CANCELLATION);
                     bookingEventPublisher.sendBookingEvent(topic, event);
                 });
     }

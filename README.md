@@ -1,6 +1,6 @@
 # Searching and Booking System
 
-This repository contains three microservices, **Catalog Service** and **Booking Service**, which together form a system for managing events, bookings, and related operations. The system is built using Spring Boot, Kafka, MongoDB, and Elasticsearch.
+This repository contains three microservices: **Catalog Service**, **Booking Service**, and **Notification Service**, which together form a system for managing events, bookings, and related operations. The system is built using Spring Boot, Kafka, MongoDB, and Elasticsearch.
 
 ## Table of Contents
 
@@ -51,6 +51,7 @@ The **Notification Service** is responsible for sending notifications via multip
 - **SMS Notifications**: Uses Twilio for sending SMS messages.
 - **Extensible Notification Providers**: Built with a `NotificationProvider` interface to support additional notification channels.
 - **MongoDB Integration**: Stores notification history for tracking purposes.
+- **Kafka Integration**: Publishes notification events to Kafka topics.
 
 ---
 
@@ -77,6 +78,7 @@ The **Notification Service** is responsible for sending notifications via multip
 - **SMS Notifications**: Configurable Twilio account credentials and phone number.
 - **MongoDB Integration**: Stores notification history for tracking purposes.
 - **Extensibility**: Easily add new notification channels by implementing the `NotificationProvider` interface.
+- **Kafka Integration**: Publishes notifications to Kafka for further processing.
 
 ---
 
@@ -101,6 +103,17 @@ The system follows a microservices architecture with the following components:
 - Java 17
 - Docker and Docker Compose
 - Gradle
+
+Set up the environment variables in a `.env` file:  
+```
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_PHONE_NUMBER=your_twilio_phone_number
+APP_MAIL_ACCOUNT=your_email_account
+SENDGRID_API_KEY=your_sendgrid_api_key
+APP_USER_INFO_EMAIL=your_user_email
+APP_USER_INFO_PHONE=your_user_phone
+```
 
 ### Running the Services
 

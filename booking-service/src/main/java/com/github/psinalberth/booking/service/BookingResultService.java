@@ -23,7 +23,7 @@ public class BookingResultService {
                 .ifPresent(booking -> {
                     log.info("Updating event {} with status '{}'", booking.eventId(), bookingEvent.type());
                     bookingRepository.update(booking.id(), bookingEvent.status());
-                    internalEventPublisher.publishEvent(new BookingNotificationEvent(booking.id(), bookingEvent));
+                    internalEventPublisher.publishEvent(new BookingNotificationEvent(booking.id(), bookingEvent, booking.user()));
                 });
 
     }
