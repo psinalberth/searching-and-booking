@@ -42,6 +42,7 @@ The **Booking Service** handles booking operations for events. It provides the f
 - Processing booking results and cancellations.
 - Managing an outbox pattern for reliable event publishing.
 - WebSocket support for real-time updates.
+- **Scheduler Integration**: Configurable cron job for booking request processing.
 
 ### Notification Service
 
@@ -52,6 +53,7 @@ The **Notification Service** is responsible for sending notifications via multip
 - **Extensible Notification Providers**: Built with a `NotificationProvider` interface to support additional notification channels.
 - **MongoDB Integration**: Stores notification history for tracking purposes.
 - **Kafka Integration**: Publishes notification events to Kafka topics.
+- **Template Management**: Supports configurable notification templates for different event types.
 
 ---
 
@@ -71,6 +73,7 @@ The **Notification Service** is responsible for sending notifications via multip
 - **Kafka Integration**: Handles booking-related events via Kafka.
 - **Swagger API Documentation**: Provides interactive API documentation.
 - **WebSocket Integration**: Enables real-time notifications for booking updates.
+- **Scheduler Integration**: Configurable cron job for booking request processing.
 
 ### Notification Service Features
 
@@ -79,6 +82,7 @@ The **Notification Service** is responsible for sending notifications via multip
 - **MongoDB Integration**: Stores notification history for tracking purposes.
 - **Extensibility**: Easily add new notification channels by implementing the `NotificationProvider` interface.
 - **Kafka Integration**: Publishes notifications to Kafka for further processing.
+- **Template Management**: Supports configurable notification templates for different event types.
 
 ---
 

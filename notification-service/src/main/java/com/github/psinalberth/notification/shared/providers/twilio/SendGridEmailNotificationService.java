@@ -2,6 +2,7 @@ package com.github.psinalberth.notification.shared.providers.twilio;
 
 import com.github.psinalberth.notification.dtos.NotificationDto;
 import com.github.psinalberth.notification.service.NotificationProvider;
+import com.github.psinalberth.notification.service.NotificationTemplateService;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
@@ -19,12 +20,16 @@ import java.io.IOException;
 public class SendGridEmailNotificationService implements NotificationProvider {
 
     private final SendGrid sendGrid;
+    private final NotificationTemplateService templateService;
     private final String mailAccount;
 
     public SendGridEmailNotificationService(
             final SendGrid sendGrid,
-            @Value("${app.config.mail.account}") final String mailAccount) {
+            final NotificationTemplateService templateService,
+            @Value("${app.config.mail.account}") final String mailAccount
+    ) {
         this.sendGrid = sendGrid;
+        this.templateService = templateService;
         this.mailAccount = mailAccount;
     }
 
@@ -32,8 +37,9 @@ public class SendGridEmailNotificationService implements NotificationProvider {
     public void send(final NotificationDto notification) {
         var from = new Email(mailAccount);
         var to = new Email(notification.userInfo().email());
-        var content = new Content("text/plain", "Notification content");
-        var mail = new Mail(from, "Notification title", to, content);
+        var template = templateService.findById(notification.templateId());
+        var content = new Content("text/plain", template.mailBody());
+        var mail = new Mail(from, template.title(), to, content);
 
         try {
             var request = new Request();
