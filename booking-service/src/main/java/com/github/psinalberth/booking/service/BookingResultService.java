@@ -1,5 +1,6 @@
 package com.github.psinalberth.booking.service;
 
+import com.github.psinalberth.booking.dtos.BookingCancelledEvent;
 import com.github.psinalberth.booking.dtos.BookingEvent;
 import com.github.psinalberth.booking.enums.BookingStatus;
 import com.github.psinalberth.booking.repository.BookingRepository;
@@ -29,6 +30,7 @@ public class BookingResultService {
                     } else {
                         log.info("Removing booking {} due to status '{}'", booking.eventId(), bookingEvent.status());
                         bookingRepository.remove(booking.id());
+                        internalEventPublisher.publishEvent(new BookingCancelledEvent(booking.eventId()));
                     }
 
                     internalEventPublisher.publishEvent(new BookingNotificationEvent(booking.id(), bookingEvent, booking.user()));

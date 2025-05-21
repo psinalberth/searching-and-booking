@@ -22,6 +22,8 @@ This repository contains three microservices: **Catalog Service**, **Booking Ser
 
 The **Searching and Booking System** is designed to manage event catalogs and handle booking operations. It supports event creation, searching, booking requests, and cancellations. The system uses Kafka for event-driven communication between services and MongoDB/Elasticsearch for data storage and search capabilities.
 
+The Booking Service now supports waitlist operations, allowing users to join a waitlist for fully booked events. The service provides endpoints to add, retrieve, and remove waitlist entries, ensuring fair and automated handling of booking opportunities as events become available.
+
 ---
 
 ## Services
@@ -69,6 +71,7 @@ The **Notification Service** is responsible for sending notifications via multip
 ### Booking Service Features
 
 - **Booking Management**: Create and cancel bookings.
+- **Waitlist Management**: Add users to a waitlist when events are full, retrieve the first user in the waitlist for an event, and remove users from the waitlist.
 - **Outbox Pattern**: Ensures reliable event publishing for booking requests.
 - **Kafka Integration**: Handles booking-related events via Kafka.
 - **Swagger API Documentation**: Provides interactive API documentation.
