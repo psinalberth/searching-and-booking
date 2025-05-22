@@ -1,6 +1,6 @@
 # Searching and Booking System
 
-This repository contains three microservices: **Catalog Service**, **Booking Service**, and **Notification Service**, which together form a system for managing events, bookings, and related operations. The system is built using Spring Boot, Kafka, MongoDB, and Elasticsearch.
+This repository contains four microservices: **Catalog Service**, **Booking Service**, **Notification Service**, and **API Gateway**, which together form a system for managing events, bookings, and related operations. The system is built using Spring Boot, Kafka, MongoDB, Elasticsearch, and Eureka for service discovery.
 
 ## Table of Contents
 
@@ -9,20 +9,18 @@ This repository contains three microservices: **Catalog Service**, **Booking Ser
     - [Catalog Service](#catalog-service)
     - [Booking Service](#booking-service)
     - [Notification Service](#notification-service)
+    - [API Gateway](#api-gateway)
 - [Features](#features)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
 - [Technologies Used](#technologies-used)
 - [Contributing](#contributing)
-- [License](#license)
 
 ---
 
 ## Overview
 
-The **Searching and Booking System** is designed to manage event catalogs and handle booking operations. It supports event creation, searching, booking requests, and cancellations. The system uses Kafka for event-driven communication between services and MongoDB/Elasticsearch for data storage and search capabilities.
-
-The Booking Service now supports waitlist operations, allowing users to join a waitlist for fully booked events. The service provides endpoints to add, retrieve, and remove waitlist entries, ensuring fair and automated handling of booking opportunities as events become available.
+The **Searching and Booking System** is designed to manage event catalogs and handle booking operations. It supports event creation, searching, booking requests, and cancellations. The system uses Kafka for event-driven communication, MongoDB/Elasticsearch for data storage and search, and Eureka for service discovery. The API Gateway provides a single entry point for all services, with dynamic routing and path rewriting.
 
 ---
 
@@ -30,76 +28,74 @@ The Booking Service now supports waitlist operations, allowing users to join a w
 
 ### Catalog Service
 
-The **Catalog Service** is responsible for managing and searching events. It provides the following functionalities:
-
-- Event creation and indexing.
-- Searching for events by criteria (e.g., full-text search, available spots).
-- Managing event bookings (confirmation and cancellation).
+- Manages and searches events.
+- Registers with Eureka for service discovery.
+- Kafka enabled for event-driven communication.
+- Event creation, indexing, and booking management.
 
 ### Booking Service
 
-The **Booking Service** handles booking operations for events. It provides the following functionalities:
-
-- Creating booking requests.
-- Processing booking results and cancellations.
-- Managing an outbox pattern for reliable event publishing.
+- Handles booking operations for events.
+- Registers with Eureka.
+- Kafka integration for booking events.
+- Waitlist management for fully booked events.
+- Outbox pattern for reliable event publishing.
 - WebSocket support for real-time updates.
-- **Scheduler Integration**: Configurable cron job for booking request processing.
+- Scheduler integration for booking processing.
 
 ### Notification Service
 
-The **Notification Service** is responsible for sending notifications via multiple channels, including email and SMS. It provides the following functionalities:
+- Sends notifications via email (SendGrid) and SMS (Twilio).
+- Registers with Eureka.
+- Kafka integration for notification events.
+- MongoDB for notification history.
+- Extensible notification providers.
+- Template management for notifications.
 
-- **Email Notifications**: Uses SendGrid for sending emails.
-- **SMS Notifications**: Uses Twilio for sending SMS messages.
-- **Extensible Notification Providers**: Built with a `NotificationProvider` interface to support additional notification channels.
-- **MongoDB Integration**: Stores notification history for tracking purposes.
-- **Kafka Integration**: Publishes notification events to Kafka topics.
-- **Template Management**: Supports configurable notification templates for different event types.
+### API Gateway
+
+- Built with Spring Cloud Gateway.
+- Registers with Eureka for dynamic service discovery.
+- Routes requests to microservices using path-based routing.
+- Path rewriting for internal endpoints.
+- Centralized entry point for all services.
+
+#### API Gateway Routing
+
+Configured in `api-gateway/src/main/resources/application.yml`:
+
+- `/booking/**` → `BOOKING-SERVICE`
+- `/notification/**` → `NOTIFICATION-SERVICE`
+- `/catalog/**` → `CATALOG-SERVICE`
+- Path rewriting removes the service prefix for internal routing.
 
 ---
 
 ## Features
 
-### Catalog Service Features
-
-- **Event Management**: Create, update, and manage events.
-- **Search Events**: Full-text search and filtering using Elasticsearch.
-- **Kafka Integration**: Publish and consume booking-related events.
-- **Health Monitoring**: Exposes actuator endpoints for health checks.
-
-### Booking Service Features
-
-- **Booking Management**: Create and cancel bookings.
-- **Waitlist Management**: Add users to a waitlist when events are full, retrieve the first user in the waitlist for an event, and remove users from the waitlist.
-- **Outbox Pattern**: Ensures reliable event publishing for booking requests.
-- **Kafka Integration**: Handles booking-related events via Kafka.
-- **Swagger API Documentation**: Provides interactive API documentation.
-- **WebSocket Integration**: Enables real-time notifications for booking updates.
-- **Scheduler Integration**: Configurable cron job for booking request processing.
-
-### Notification Service Features
-
-- **Email Notifications**: Configurable sender email address via `app.config.mail.account` property.
-- **SMS Notifications**: Configurable Twilio account credentials and phone number.
-- **MongoDB Integration**: Stores notification history for tracking purposes.
-- **Extensibility**: Easily add new notification channels by implementing the `NotificationProvider` interface.
-- **Kafka Integration**: Publishes notifications to Kafka for further processing.
-- **Template Management**: Supports configurable notification templates for different event types.
+- **Spring Boot 3.4.5** and **Spring Cloud 2024.0.1**.
+- Modular microservices architecture.
+- Eureka for service registration and discovery.
+- Spring Cloud Gateway as API Gateway.
+- Kafka for asynchronous, event-driven communication.
+- MongoDB and Elasticsearch for data storage and search.
+- Gradle Kotlin DSL for build automation.
+- Java 17 toolchain enforced in all modules.
+- Centralized dependency management with Spring Cloud BOM.
+- Docker support for running dependencies.
 
 ---
 
 ## Architecture
 
-The system follows a microservices architecture with the following components:
-
-- **Catalog Service**: Manages event data and integrates with Elasticsearch for search capabilities.
-- **Booking Service**: Handles booking operations and integrates with Kafka for event-driven communication.
-- **Notification Service**: Sends notifications via email and SMS, with MongoDB for persistence.
-- **Kafka**: Used for asynchronous communication between services.
-- **MongoDB**: Stores event, booking, and notification data.
-- **Elasticsearch**: Provides advanced search capabilities for events.
-- **WebSocket**: Supports real-time communication for booking updates.
+- **Catalog Service**: Manages event data, integrates with Elasticsearch.
+- **Booking Service**: Handles bookings, integrates with Kafka.
+- **Notification Service**: Sends notifications, persists history in MongoDB.
+- **API Gateway**: Routes and rewrites requests, integrates with Eureka.
+- **Kafka**: Asynchronous communication.
+- **MongoDB**: Data storage.
+- **Elasticsearch**: Advanced search.
+- **WebSocket**: Real-time updates.
 
 ---
 
@@ -107,11 +103,11 @@ The system follows a microservices architecture with the following components:
 
 ### Prerequisites
 
-- Java 17
+- Java 17+
 - Docker and Docker Compose
-- Gradle
+- Gradle 8+
 
-Set up the environment variables in a `.env` file:  
+Set up environment variables in a `.env` file:
 ```
 TWILIO_ACCOUNT_SID=your_twilio_account_sid
 TWILIO_AUTH_TOKEN=your_twilio_auth_token
@@ -128,3 +124,38 @@ APP_USER_INFO_PHONE=your_user_phone
    ```bash
    git clone https://github.com/your-repo/searching-and-booking.git
    cd searching-and-booking
+    ```
+
+2. Build all services:
+    ```bash
+    ./gradlew build
+    ```
+
+3. Start dependencies (Kafka, MongoDB, Elasticsearch, Eureka) using Docker Compose.
+
+4. Run each service:
+    ```bash
+    ./gradlew :catalog-service:bootRun
+    ./gradlew :booking-service:bootRun
+    ./gradlew :notification-service:bootRun
+    ./gradlew :api-gateway:bootRun
+    ```
+
+<hr/>
+
+### Technologies Used
+- Java 17
+- Spring Boot 3.4.5
+- Spring Cloud 2024.0.1
+- Spring Cloud Gateway
+- Eureka Discovery Client
+- Kafka
+- MongoDB
+- Elasticsearch
+- Gradle Kotlin DSL
+- Docker
+
+<hr/>
+
+### Contributing
+Contributions are welcome! Please open issues or submit pull requests for improvements.

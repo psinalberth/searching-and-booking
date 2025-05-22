@@ -12,6 +12,7 @@ val kafkaVersion by extra("3.3.5")
 val springDocVersion by extra("2.8.6")
 val sendGridVersion by extra("4.10.3")
 val twilioVersion by extra("10.7.2")
+val eurekaVersion by extra("4.2.1")
 
 java {
     toolchain {
@@ -39,6 +40,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springDocVersion")
     implementation("com.sendgrid:sendgrid-java:$sendGridVersion")
     implementation("com.twilio.sdk:twilio:$twilioVersion")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:$eurekaVersion")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

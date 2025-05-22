@@ -10,6 +10,8 @@ version = "1.0.0"
 val mapstructVersion by extra("1.6.3")
 val kafkaVersion by extra("3.3.5")
 val springDocVersion by extra("2.8.6")
+val eurekaVersion by extra("4.2.1")
+
 
 java {
     toolchain {
@@ -36,6 +38,7 @@ dependencies {
     implementation("org.mapstruct:mapstruct:$mapstructVersion")
     implementation("org.springframework.kafka:spring-kafka:$kafkaVersion")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springDocVersion")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:$eurekaVersion")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
